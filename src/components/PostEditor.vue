@@ -28,13 +28,11 @@ export default {
   methods: {
     save() {
       const post = {
-        id: "",
         text: this.text,
-        publishedAt: Math.floor(Date.now() / 1000),
-        userId: "ALXhxjwgY9PinwNGHpfai6OWyDu2",
       };
 
       this.$emit("save", { post });
+      this.text = "";
     },
   },
 };

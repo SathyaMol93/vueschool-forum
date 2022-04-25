@@ -1,13 +1,29 @@
 <template>
   <div class="col-large push-top">
-    <h1>{{ thread.title }}</h1>
+    <h1>
+      {{ thread.title }}
+
+      <router-link
+        :to="{ name: 'ThreadEdit', params: { id: thread.id } }"
+        class="btn-green btn-small"
+        >Edit thread</router-link
+      >
+    </h1>
+    <p>
+      By <a href="#" class="link-unstyled">Robin</a>, 2 hours ago.
+      <span
+        style="float: right; margin-top: 2px"
+        class="hide-mobile text-faded text-small"
+        >3 replies by 3 contributors</span
+      >
+    </p>
     <post-list :posts="threadPosts" />
     <post-editor @save="add" />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import PostList from "../components/PostList.vue";
 import PostEditor from "../components/PostEditor.vue";
 export default {
@@ -20,9 +36,7 @@ export default {
   },
   computed: {
     ...mapState(["posts", "threads"]),
-    thread() {
-      return this.threads.find((t) => t.id === this.id);
-    },
+    ...mapGetters(["thread"]),
     threadPosts() {
       return this.posts.filter((post) => post.threadId === this.id);
     },
@@ -32,7 +46,10 @@ export default {
     add(event) {
       const post = {
         ...event.post,
+        id: "",
         threadId: this.id,
+        publishedAt: 0,
+        userId: "",
       };
       this.createPost(post);
     },
